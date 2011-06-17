@@ -21,17 +21,7 @@ namespace vh {
 
   class VH_Flocking : public ParticleBehaviour {
   public:
-    VH_Flocking(Node* node) :
-      ParticleBehaviour(node),
-      _centeringRate(100.0f),
-      _separation(0.1f),
-      _velocityMatchRate(8.0f),
-      _goalAttainRate(100.0f),
-      _maxSpeed(1.0f),
-      _goal(0.0f, 0.0f, 0.0f),
-      _avoid(0.0f, 0.0f, 0.0f),
-      _avoidDistance(1.0f)
-    {}
+    VH_Flocking(Node* node);
     virtual ~VH_Flocking() {}
 
     virtual const char* Class() const { return kPluginClass; }
@@ -73,6 +63,7 @@ namespace vh {
     float _maxSpeed;
     Vector3 _goal;
     Vector3 _avoid;
+    bool _avoidEnabled;
     float _avoidDistance;
   };
 
@@ -80,6 +71,21 @@ namespace vh {
   //
   // VH_Flocking methods
   //
+
+  VH_Flocking::VH_Flocking(Node* node) :
+    ParticleBehaviour(node),
+    _centeringRate(100.0f),
+    _separation(0.1f),
+    _velocityMatchRate(8.0f),
+    _goalAttainRate(100.0f),
+    _maxSpeed(1.0f),
+    _goal(0.0f, 0.0f, 0.0f),
+    _avoid(0.0f, 0.0f, 0.0f),
+    _avoidEnabled(false),
+    _avoidDistance(1.0f)
+  {
+  }
+
 
   void VH_Flocking::knobs(Knob_Callback f)
   {
@@ -92,6 +98,7 @@ namespace vh {
     XYZ_knob(f, &_goal.x, "goal");
 
     XYZ_knob(f, &_avoid.x, "avoid");
+    Bool_knob(f, &_avoidEnabled, "avoid_enabled", "enable");
     Float_knob(f, &_avoidDistance, "avoid_distance", "avoid distance");
   }
 
@@ -139,7 +146,8 @@ namespace vh {
       force += goalSeeking(position);
 
       // Rule 5: avoid a specified location.
-      force += avoidance(position, kAvoidDistanceSquared);
+      if (_avoidEnabled)
+        force += avoidance(position, kAvoidDistanceSquared);
 
       // Rule 6: limit the maximum speed of movement.
       force = speedLimit(force, kMaxSpeedSquared);
