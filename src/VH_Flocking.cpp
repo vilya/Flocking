@@ -53,9 +53,11 @@ namespace vh {
                        const int numParticles,
                        const float separationSquared) const;
 
-  Vector3 matchVelocity(const Vector3& velocity,
-                        const Vector3& summedVelocities,
-                        const int numParticles) const;
+    Vector3 matchVelocity(const Vector3& velocity,
+                          const Vector3& summedVelocities,
+                          const int numParticles) const;
+
+    Vector3 goalSeeking(const Vector3& position) const;
 
   private:
     float _centeringRate;
@@ -129,8 +131,7 @@ namespace vh {
       force += matchVelocity(velocity, summedVelocities, kNumParticles);
 
       // Rule 4: particles try to move towards a common goal.
-      Vector3 motionTowardsGoal = (_goal - position) / _goalAttainRate;
-      force += motionTowardsGoal;
+      force += goalSeeking(position);
 
       // Rule 5: avoid a specified location.
       Vector3 avoidGap = _avoid - position;
@@ -191,6 +192,13 @@ namespace vh {
     Vector3 motionWithFlock =
       (perceivedVelocity - velocity) / _velocityMatchRate;
     return motionWithFlock;
+  }
+
+
+  Vector3 VH_Flocking::goalSeeking(const Vector3& position) const
+  {
+    Vector3 motionTowardsGoal = (_goal - position) / _goalAttainRate;
+    return motionTowardsGoal;
   }
 
 
