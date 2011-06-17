@@ -44,7 +44,14 @@ namespace vh {
 
   private:
     Vector3 centering(const Vector3& position,
-                      const Vector3& summedPositions, const int numParticles) const;
+                      const Vector3& summedPositions,
+                      const int numParticles) const;
+
+    Vector3 separation(const Vector3& position,
+                       const ParticleSystem* ps,
+                       const unsigned int i,
+                       const int numParticles,
+                       const float separationSquared) const;
 
   private:
     float _centeringRate;
@@ -109,20 +116,10 @@ namespace vh {
       Vector3 force(0, 0, 0);
 
       // Rule 1: particles try to move towards the centre of the flock.
-      centering(position, summedPositions, kNumParticles);
+      force += centering(position, summedPositions, kNumParticles);
 
       // Rule 2: particles try to maintain a minimum separation from each other.
-      Vector3 motionAwayFromOthers(0, 0, 0);
-      for (unsigned int j = 0; j < kNumParticles; ++j) {
-        if (j == i)
-          continue;
-
-        Vector3 gap = (ps->particlePosition(j) - position);
-        float distanceSquared = gap.lengthSquared();
-        if (distanceSquared < kSeparationSquared)
-          motionAwayFromOthers -= gap;
-      }
-      force += motionAwayFromOthers;
+      force += separation(position, ps, i, kNumParticles, kSeparationSquared);
 
       // Rule 3: particles try to match velocity with each other.
       Vector3 perceivedVelocity =
@@ -164,6 +161,25 @@ namespace vh {
     return motionTowardsCenter;
   }
 
+
+  Vector3 VH_Flocking::separation(const Vector3& position,
+                                  const ParticleSystem* ps,
+                                  const unsigned int i,
+                                  const int numParticles,
+                                  const float separationSquared) const
+  {
+    Vector3 motionAwayFromOthers(0, 0, 0);
+    for (unsigned int j = 0; j < numParticles; ++j) {
+      if (j == i)
+        continue;
+
+      Vector3 gap = ps->particlePosition(j) - position;
+      float distanceSquared = gap.lengthSquared();
+      if (distanceSquared < separationSquared)
+        motionAwayFromOthers -= gap;
+    }
+    return motionAwayFromOthers;
+  }
   
 
   //
