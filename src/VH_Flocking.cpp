@@ -203,12 +203,18 @@ namespace vh {
   Vector3 VH_Flocking::avoidance(const Vector3& position,
                                  const float avoidDistanceSquared) const
   {
-    Vector3 avoidGap = _avoid - position;
-    float distanceFromAvoidSquared = avoidGap.lengthSquared();
-    if (distanceFromAvoidSquared < avoidDistanceSquared)
-      return -avoidGap;
-    else
+    Vector3 gap = position - _avoid;
+    float distanceFromAvoidSquared = gap.lengthSquared();
+    if (distanceFromAvoidSquared < avoidDistanceSquared) {
+      float distanceFromAvoid = sqrtf(distanceFromAvoidSquared);
+      Vector3 normal = gap / distanceFromAvoid;
+
+      float distanceInside = _avoidDistance - distanceFromAvoid;
+      return normal * distanceInside;
+    }
+    else {
       return Vector3(0, 0, 0);
+    }
   }
 
 
