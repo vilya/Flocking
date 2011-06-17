@@ -59,6 +59,9 @@ namespace vh {
 
     Vector3 goalSeeking(const Vector3& position) const;
 
+    Vector3 avoidance(const Vector3& position,
+                      const float avoidDistanceSquared) const;
+
   private:
     float _centeringRate;
     float _separation;
@@ -134,10 +137,7 @@ namespace vh {
       force += goalSeeking(position);
 
       // Rule 5: avoid a specified location.
-      Vector3 avoidGap = _avoid - position;
-      float distanceFromAvoidSquared = avoidGap.lengthSquared();
-      if (distanceFromAvoidSquared < kAvoidDistanceSquared)
-        force -= avoidGap;
+      force += avoidance(position, kAvoidDistanceSquared);
 
       // Rule 6: limit the maximum speed of movement.
       float speedSquared = force.lengthSquared();
@@ -199,6 +199,18 @@ namespace vh {
   {
     Vector3 motionTowardsGoal = (_goal - position) / _goalAttainRate;
     return motionTowardsGoal;
+  }
+
+
+  Vector3 VH_Flocking::avoidance(const Vector3& position,
+                                 const float avoidDistanceSquared) const
+  {
+    Vector3 avoidGap = _avoid - position;
+    float distanceFromAvoidSquared = avoidGap.lengthSquared();
+    if (distanceFromAvoidSquared < avoidDistanceSquared)
+      return -avoidGap;
+    else
+      return Vector3(0, 0, 0);
   }
 
 
