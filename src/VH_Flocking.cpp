@@ -131,7 +131,7 @@ namespace vh {
 
       Vector3 position = ps->particlePosition(i);
       Vector3 velocity = ps->particleVelocity(i);
-      Vector3 force(0, 0, 0);
+      Vector3 force = -velocity;
 
       // Rule 1: particles try to move towards the centre of the flock.
       force += centering(position, summedPositions, kNumParticles);
@@ -153,8 +153,7 @@ namespace vh {
       force = speedLimit(force, kMaxSpeedSquared);
 
       // Apply the total force to the particle.
-      ps->particlePosition(i) += force * dt;
-      //applyForce(ps, i, context, force);
+      applyForce(ps, i, context, force);
     }
   }
 
