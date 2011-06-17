@@ -62,6 +62,9 @@ namespace vh {
     Vector3 avoidance(const Vector3& position,
                       const float avoidDistanceSquared) const;
 
+    Vector3 speedLimit(const Vector3& force,
+                       const float maxSpeedSquared) const;
+
   private:
     float _centeringRate;
     float _separation;
@@ -121,7 +124,6 @@ namespace vh {
 
       Vector3 position = ps->particlePosition(i);
       Vector3 velocity = ps->particleVelocity(i);
-
       Vector3 force(0, 0, 0);
 
       // Rule 1: particles try to move towards the centre of the flock.
@@ -140,11 +142,7 @@ namespace vh {
       force += avoidance(position, kAvoidDistanceSquared);
 
       // Rule 6: limit the maximum speed of movement.
-      float speedSquared = force.lengthSquared();
-      if (speedSquared > kMaxSpeedSquared) {
-        float speed = sqrtf(speedSquared);
-        force = force / speed * _maxSpeed;
-      }
+      force = speedLimit(force, kMaxSpeedSquared);
 
       // Apply the total force to the particle.
       ps->particlePosition(i) += force * dt;
@@ -211,6 +209,21 @@ namespace vh {
       return -avoidGap;
     else
       return Vector3(0, 0, 0);
+  }
+
+
+  Vector3 VH_Flocking::speedLimit(const Vector3& force,
+                                  const float maxSpeedSquared) const
+  {
+    float speedSquared = force.lengthSquared();
+    if (speedSquared > maxSpeedSquared) {
+      float speed = sqrtf(speedSquared);
+      Vector3 newForce = force / speed * _maxSpeed;
+      return newForce;
+    }
+    else {
+      return force;
+    }
   }
 
 
