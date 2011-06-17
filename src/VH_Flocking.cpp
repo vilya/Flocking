@@ -28,7 +28,9 @@ namespace vh {
       _velocityMatchRate(8.0f),
       _goalAttainRate(100.0f),
       _maxSpeed(1.0f),
-      _goal(0.0f, 0.0f, 0.0f)
+      _goal(0.0f, 0.0f, 0.0f),
+      _avoid(0.0f, 0.0f, 0.0f),
+      _avoidDistance(1.0f)
     {}
     virtual ~VH_Flocking() {}
 
@@ -47,6 +49,8 @@ namespace vh {
     float _goalAttainRate;
     float _maxSpeed;
     Vector3 _goal;
+    Vector3 _avoid;
+    float _avoidDistance;
   };
 
 
@@ -57,12 +61,15 @@ namespace vh {
   void VH_Flocking::knobs(Knob_Callback f)
   {
     ParticleBehaviour::knobs(f);
-    Float_knob(f, &_centeringRate, "centering rate");
-    Float_knob(f, &_separation, "separation distance");
-    Float_knob(f, &_velocityMatchRate, "velocity match rate");
-    Float_knob(f, &_goalAttainRate, "goal attainment rate");
-    Float_knob(f, &_maxSpeed, "maximum speed");
+    Float_knob(f, &_centeringRate, "centering_rate", "centering rate");
+    Float_knob(f, &_separation, "separation_distance", "separation distance");
+    Float_knob(f, &_velocityMatchRate, "velocity_match_rate", "velocity match rate");
+    Float_knob(f, &_goalAttainRate, "goal_attainment_rate", "goal attainment rate");
+    Float_knob(f, &_maxSpeed, "maximum_speed", "maximum speed");
     XYZ_knob(f, &_goal.x, "goal");
+
+    XYZ_knob(f, &_avoid.x, "avoid");
+    Float_knob(f, &_avoidDistance, "avoid_distance", "avoid distance");
   }
 
 
@@ -71,9 +78,8 @@ namespace vh {
     const unsigned int kNumParticles = ps->numParticles();
     const float kSeparationSquared = _separation * _separation;
     const float kMaxSpeedSquared = _maxSpeed * _maxSpeed;
+    const float kAvoidDistanceSquared = _avoidDistance * _avoidDistance;
     const double kEnd = context.endTime();
-
-    // XXX doesn't handle subframe stepping yet.
 
     // Pre-calculations
     Vector3 summedPositions(0, 0, 0);
@@ -129,7 +135,13 @@ namespace vh {
       Vector3 motionTowardsGoal = (_goal - position) / _goalAttainRate;
       force += motionTowardsGoal;
 
-      // Rule 5: limit the maximum speed of movement.
+      // Rule 5: avoid a specified location.
+      Vector3 avoidGap = _avoid - position;
+      float distanceFromAvoidSquared = avoidGap.lengthSquared();
+      if (distanceFromAvoidSquared < kAvoidDistanceSquared)
+        force -= avoidGap;
+
+      // Rule 6: limit the maximum speed of movement.
       float speedSquared = force.lengthSquared();
       if (speedSquared > kMaxSpeedSquared) {
         float speed = sqrtf(speedSquared);
