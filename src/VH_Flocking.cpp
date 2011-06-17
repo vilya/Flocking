@@ -43,6 +43,10 @@ namespace vh {
     static const Description desc;
 
   private:
+    Vector3 centering(const Vector3& position,
+                      const Vector3& summedPositions, const int numParticles) const;
+
+  private:
     float _centeringRate;
     float _separation;
     float _velocityMatchRate;
@@ -105,11 +109,7 @@ namespace vh {
       Vector3 force(0, 0, 0);
 
       // Rule 1: particles try to move towards the centre of the flock.
-      Vector3 perceivedCenter =
-          (summedPositions - position) / (kNumParticles - 1);
-      Vector3 motionTowardsCenter =
-        (perceivedCenter - position) / _centeringRate;
-      force += motionTowardsCenter;
+      centering(position, summedPositions, kNumParticles);
 
       // Rule 2: particles try to maintain a minimum separation from each other.
       Vector3 motionAwayFromOthers(0, 0, 0);
@@ -154,6 +154,17 @@ namespace vh {
     }
   }
 
+
+  Vector3 VH_Flocking::centering(const Vector3& position,
+                                 const Vector3& summedPositions,
+                                 const int numParticles) const
+  {
+    Vector3 perceivedCenter = (summedPositions - position) / (numParticles - 1);
+    Vector3 motionTowardsCenter = (perceivedCenter - position) / _centeringRate;
+    return motionTowardsCenter;
+  }
+
+  
 
   //
   // Functions
