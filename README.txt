@@ -1,0 +1,14 @@
+This is a Particle node for Nuke 6.3 which simulates flocking behaviour.
+
+It applies a few simple rules to each particle and it's from the combination of
+these that the flocking behaviour emerges:
+1. Each particles will try to move towards the centre of the set of particles.
+2. All particles will try to remain at least a small distance away from all
+   other particles.
+3. Particles will try to match the velocity of all the other particles.
+
+These are the basic rules of a flocking system. We also have the following
+extra rules, to make it a bit more controllable:
+4. The particles will steer towards a common location.
+5. Particles will try to avoid certain other locations.
+6. There's an upper limit to the speed that particles can travel at.

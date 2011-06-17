@@ -1,0 +1,3 @@
+- Have the flock avoid another set of particles instead of a single input.
+- The node should take a second input, of type ParticleOp, giving the particles
+  (if any) to avoid.
