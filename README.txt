@@ -12,3 +12,7 @@ extra rules, to make it a bit more controllable:
 4. The particles will steer towards a common location.
 5. Particles will try to avoid certain other locations.
 6. There's an upper limit to the speed that particles can travel at.
+
+
+This code is in the public domain; do what you want with it. All I ask is that
+you think kindly of me. :-)
