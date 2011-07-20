@@ -1,0 +1,88 @@
+#! /Applications/Nuke6.3v1/NukeX6.3v1.app/../Nuke6.3v1.app/Contents/MacOS/Nuke6.3v1 -nx
+version 6.3 v1
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="0" y="22" w="1920" h="1174" screen="0">
+        <splitter orientation="1">
+            <split size="1394"/>
+            <splitter orientation="1">
+                <split size="40"/>
+                <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                    <page id="Toolbar.1"/>
+                </dock>
+                <split size="1350"/>
+                <splitter orientation="2">
+                    <split size="1152"/>
+                    <dock id="" activePageId="Viewer.1">
+                        <page id="Viewer.1"/>
+                    </dock>
+                </splitter>
+            </splitter>
+            <split size="522"/>
+            <splitter orientation="2">
+                <split size="574"/>
+                <dock id="" activePageId="DAG.1">
+                    <page id="DAG.1"/>
+                    <page id="Script Editor.1"/>
+                </dock>
+                <split size="574"/>
+                <dock id="" activePageId="Properties.1">
+                    <page id="Properties.1"/>
+                </dock>
+            </splitter>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name /Users/vilya/Code/Flocking/example/example.nk
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+}
+ColorWheel {
+ inputs 0
+ gamma 0.45
+ name ColorWheel1
+ xpos -146
+ ypos -287
+}
+Sphere {
+ inputs 0
+ radius 10
+ name Sphere1
+ xpos -48
+ ypos -298
+}
+push 0
+ParticleEmitter {
+ inputs 3
+ rate {{"frame == 0 ? 100 : 0"}}
+ lifetime 100
+ velocity 0
+ size 0.5
+ name ParticleEmitter1
+ xpos -48
+ ypos -180
+}
+VH_Flocking {
+ centering_rate 30
+ separation_distance 0.5
+ goal_attainment_rate 25
+ goal {{"sin(frame / 50 * pi) * 10"} 0 {"cos(frame / 50 * pi) * 10"}}
+ avoid {0 0 -5}
+ avoid_enabled true
+ avoid_distance 3
+ name VH_Flocking1
+ selected true
+ xpos -48
+ ypos -72
+}
+Viewer {
+ frame 1
+ input_process false
+ name Viewer1
+ xpos -48
+ ypos 43
+}
