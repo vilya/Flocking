@@ -5,10 +5,10 @@ DIST = dist
 PLUGINS = VH_Flocking
 
 ifeq ($(OSTYPE), linux-gnu)
-NDK = /home/vilya/n63/Apps/Nuke/nuke/objects/linux-64-x86-debug-410/Bundle
+NDK = /usr/local/Nuke6.3v1
 PLUGIN_EXT = so
 else
-NDK = /Applications/Nuke6.3dev/Nuke6.3dev.app/Contents/MacOS
+NDK = /Applications/Nuke6.3v1/Nuke6.3v1.app/Contents/MacOS
 PLUGIN_EXT = dylib
 endif
 
