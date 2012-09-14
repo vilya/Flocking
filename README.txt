@@ -1,3 +1,6 @@
+VH_Flocking - a flocking simulator for Nuke particles.
+======================================================
+
 This is a Particle node for Nuke 6.3 which simulates flocking behaviour.
 
 It applies a few simple rules to each particle and it's from the combination of
@@ -14,5 +17,39 @@ extra rules, to make it a bit more controllable:
 6. There's an upper limit to the speed that particles can travel at.
 
 
-This code is in the public domain; do what you want with it. All I ask is that
-you think kindly of me. :-)
+Compiling
+=========
+
+Linux
+-----
+
+- Edit the Makefile:
+  - change the path on line 8 to match the root of your Nuke install.
+- Run make:
+    OSTYPE=linux-gnu make
+
+
+Mac
+---
+
+- Edit the Makefile:
+  - change the path on line 11 to match the root of your Nuke install.
+- Run make:
+    make
+
+
+Windows
+-------
+
+No idea, sorry. I've only tried building on Mac and Linux. Nuke ships with a
+sample project for Visual Studio which may be enough to get you started.
+
+
+Contact
+=======
+
+If you have any questions, feedback or requests, feel free to email me:
+
+  Vilya Harvey
+  <vilya.harvey@gmail.com>
+
