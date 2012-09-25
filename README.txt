@@ -24,7 +24,9 @@ Linux
 -----
 
 - Edit the Makefile:
-  - change the path on line 8 to match the root of your Nuke install.
+  - change the NUKE_VERSION_MAJOR and NUKE_VERSION_MINOR variables to match the
+    version of Nuke that you're compiling against.
+  - change the path on line 12 to match the root of your Nuke install.
 - Run make:
     OSTYPE=linux-gnu make
 
@@ -33,7 +35,9 @@ Mac
 ---
 
 - Edit the Makefile:
-  - change the path on line 11 to match the root of your Nuke install.
+  - change the NUKE_VERSION_MAJOR and NUKE_VERSION_MINOR variables to match the
+    version of Nuke that you're compiling against.
+  - change the path on line 16 to match the root of your Nuke install.
 - Run make:
     make
 

@@ -28,11 +28,17 @@ namespace vh {
     virtual const char* node_help() const { return kPluginHelp; }
 
     virtual void knobs(Knob_Callback f);
+#if NUKE_VERSION_MAJOR >= 7
+    virtual bool applyBehaviour(const ParticleContext& context, ParticleSystem* ps);
+#else
     virtual void applyBehaviour(const ParticleContext& context, ParticleSystem* ps);
+#endif
 
     static const Description desc;
 
   private:
+    void flocking(const ParticleContext& context, ParticleSystem* ps);
+
     Vector3 centering(const Vector3& position,
                       const Vector3& summedPositions,
                       const int numParticles) const;
@@ -103,7 +109,21 @@ namespace vh {
   }
 
 
+#if NUKE_VERSION_MAJOR >= 7
+  bool VH_Flocking::applyBehaviour(const ParticleContext& context, ParticleSystem* ps)
+  {
+    flocking(context, ps);
+    return true;
+  }
+#else
   void VH_Flocking::applyBehaviour(const ParticleContext& context, ParticleSystem* ps)
+  {
+    flocking(context, ps);
+  }
+#endif
+
+
+  void VH_Flocking::flocking(const ParticleContext& context, ParticleSystem* ps)
   {
     const unsigned int kNumParticles = ps->numParticles();
     const float kSeparationSquared = _separation * _separation;
