@@ -1,1 +1,8 @@
-- Have the flock avoid another set of particles instead of a single point.
+- Make the algorithm scale better with the number of particles. Currently the
+  runtime is O(N^2) with respect to the number of particles, due to the
+  separation rule. Should be able to make this O(N*log(N)) by using suitable
+  data structures & algorithms.
+
+- Have the flock avoid arbitrary geo (including other particles) instead of
+  just a single fixed point.
+
