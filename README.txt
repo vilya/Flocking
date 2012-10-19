@@ -27,8 +27,15 @@ Linux
   - change the NUKE_VERSION_MAJOR and NUKE_VERSION_MINOR variables to match the
     version of Nuke that you're compiling against.
   - change the path on line 12 to match the root of your Nuke install.
+
 - Run make:
+
+    OSTYPE=linux-gnu make dirs
     OSTYPE=linux-gnu make
+
+  The 'make dirs' command is only needed the first time you build the plugin;
+  it creates the 'build' and 'dist' directories that will contain the
+  intermediate files and the final plugin respectively.
 
 
 Mac
@@ -38,8 +45,15 @@ Mac
   - change the NUKE_VERSION_MAJOR and NUKE_VERSION_MINOR variables to match the
     version of Nuke that you're compiling against.
   - change the path on line 16 to match the root of your Nuke install.
+
 - Run make:
+
+    make dirs
     make
+
+  The 'make dirs' command is only needed the first time you build the plugin;
+  it creates the 'build' and 'dist' directories that will contain the
+  intermediate files and the final plugin respectively.
 
 
 Windows
