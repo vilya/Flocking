@@ -6,7 +6,11 @@ SRC = src
 OBJ = build/obj
 DIST = dist
 
-PLUGINS = VH_Flocking VH_Centering
+PLUGINS = \
+  VH_Flocking \
+  VH_Centering \
+  VH_Separation
+
 
 ifeq ($(OSTYPE), linux-gnu)
 NDK = /usr/local/Nuke7.0v1
