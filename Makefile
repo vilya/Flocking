@@ -1,15 +1,15 @@
 # The version of Nuke we're compiling for. Change these to match your version.
-NUKE_VERSION_MAJOR = 6
-NUKE_VERSION_MINOR = 3
+NUKE_VERSION_MAJOR = 7
+NUKE_VERSION_MINOR = 0
 
 SRC = src
 OBJ = build/obj
 DIST = dist
 
-PLUGINS = VH_Flocking
+PLUGINS = VH_Flocking VH_Centering
 
 ifeq ($(OSTYPE), linux-gnu)
-NDK = /usr/local/Nuke6.3v8
+NDK = /usr/local/Nuke7.0v1
 PLUGIN_EXT = so
 INSTALL = $(HOME)/.nuke/$(NUKE_VERSION_MAJOR).$(NUKE_VERSION_MINOR)/plugins
 else
